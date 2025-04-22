@@ -15,5 +15,6 @@
         "ms-azuretools.vscode-docker"
       ]
     }
-  }
+  },
+  "postStartCommand": "code --command workbench.action.tasks.runTask --args 'Start Backend Dev'"
 }

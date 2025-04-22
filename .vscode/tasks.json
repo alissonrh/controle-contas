@@ -1,0 +1,22 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Backend Dev",
+      "type": "shell",
+      "command": "npx prisma generate && npx prisma migrate deploy && npm run dev",
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": [],
+      "isBackground": false,
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    }
+  ]
+}

@@ -3,7 +3,6 @@ backend/node_modules
 
 # Ambiente do container
 backend/.env
-.vscode/
 
 # Prisma
 backend/prisma/dev.db
