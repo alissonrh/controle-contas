@@ -1,0 +1,27 @@
+# Node modules
+backend/node_modules
+
+# Ambiente do container
+backend/.env
+.vscode/
+
+# Prisma
+backend/prisma/dev.db
+backend/prisma/dev.db-journal
+
+# Migrations temporárias (se não quiser versionar)
+# backend/prisma/migrations/
+
+# Log files
+*.log
+
+# Docker volumes
+pgdata
+
+# VSCode Dev Container metadata (pode manter se quiser fora do Git)
+.devcontainer/.postCreate*
+.devcontainer/.postStart*
+
+# Sistema
+.DS_Store
+Thumbs.db
