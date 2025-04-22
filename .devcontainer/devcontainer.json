@@ -2,7 +2,7 @@
   "name": "Controle Contas Dev",
   "dockerComposeFile": "../docker-compose.yml",
   "service": "backend",
-  "workspaceFolder": "/personal-finance-app",
+  "workspaceFolder": "/workspaces/personal-finance-app",
   "customizations": {
     "vscode": {
       "settings": {
