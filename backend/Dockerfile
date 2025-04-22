@@ -2,6 +2,8 @@
 FROM node:20-alpine
 
 # Diretório de trabalho dentro do container
+RUN apk add --no-cache git openssh
+
 WORKDIR /personal-finance-app
 
 # Copia os arquivos necessários
