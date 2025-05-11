@@ -8,8 +8,11 @@
     "format": "prettier --write .",
     "build": "tsc",
     "start": "node dist/index.js",
-    "restart": "npx prisma generate npx prisma migrate deploy npx prisma db seed",
-    "seed": "ts-node prisma/seed.ts"
+    "restart": "npm run db:reset && npm run db:migrate && npm run db:seed",
+    "db:reset": "npx prisma migrate reset --force",
+    "db:migrate": "npx prisma migrate deploy",
+    "db:seed": "ts-node prisma/seed.ts",
+    "postinstall": "npx prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^6.6.0",
