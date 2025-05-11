@@ -1,12 +1,12 @@
 # Node modules
-backend/node_modules
+/node_modules
 
 # Ambiente do container
-backend/.env
+.env
 
 # Prisma
-backend/prisma/dev.db
-backend/prisma/dev.db-journal
+/prisma/dev.db
+/prisma/dev.db-journal
 
 # Migrations temporárias (se não quiser versionar)
 # backend/prisma/migrations/
