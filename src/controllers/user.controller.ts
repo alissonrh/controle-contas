@@ -1,13 +1,14 @@
 import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
-import { PrismaClient } from '@prisma/client'
+
 import { userSchema } from '../validators/user.validators'
 import dotenv from 'dotenv'
 import { z } from 'zod'
 import { generateToken } from '../utils/jwt'
-dotenv.config()
+import { JwtPayload } from '../utils/interfaces/jwt-payload.interface'
+import { prisma } from '../utils/lib/prisma'
 
-const prisma = new PrismaClient()
+dotenv.config()
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
@@ -61,13 +62,14 @@ export const loginUser = async (req: Request, res: Response) => {
     const token = generateToken(payload)
 
     return res.status(200).json({ token })
-  } catch {
+  } catch (error) {
+    console.error('Create DebtSource error:', error)
     return res.status(500).json({ error: 'Internal server error' })
   }
 }
 
 export const getMe = async (
-  req: Request & { user?: { userId: string } },
+  req: Request & { user?: JwtPayload },
   res: Response
 ) => {
   try {

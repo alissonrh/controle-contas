@@ -1,13 +1,9 @@
 import { Request, Response, NextFunction } from 'express'
 import dotenv from 'dotenv'
 import { verifyToken } from '../utils/jwt'
+import { JwtPayload } from '../utils/interfaces/jwt-payload.interface'
 
 dotenv.config()
-
-interface JwtPayload {
-  userId: string
-  email: string
-}
 
 export const authenticateToken = (
   req: Request & { user?: JwtPayload },

@@ -73,8 +73,10 @@ paths:
               properties:
                 email:
                   type: string
+                  example: "alisson@example.com"
                 password:
                   type: string
+                  example: "Teste@123"
       responses:
         200:
           description: Token JWT retornado
@@ -349,6 +351,16 @@ paths:
               properties:
                 name:
                   type: string
+                type:
+                  type: string
+                  enum: ['CARTAO', 'BANCO', 'PESSOA', 'CREDIARIO', 'OUTRO'] 
+                dueDay:
+                  type: integer
+                  minimum: 1
+                  maximum: 31
+                description:
+                  type: string
+                  nullable: true
       responses:
         200:
           description: Fonte de dívida atualizada
