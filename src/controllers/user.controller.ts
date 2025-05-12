@@ -5,7 +5,7 @@ import { userSchema } from '../validators/user.validators'
 import dotenv from 'dotenv'
 import { z } from 'zod'
 import { generateToken } from '../utils/jwt'
-import { JwtPayload } from '../utils/interfaces/jwt-payload.interface'
+import { jwtPayload } from '../utils/interfaces/jwt-payload.interface'
 import { prisma } from '../utils/lib/prisma'
 
 dotenv.config()
@@ -69,7 +69,7 @@ export const loginUser = async (req: Request, res: Response) => {
 }
 
 export const getMe = async (
-  req: Request & { user?: JwtPayload },
+  req: Request & { user?: jwtPayload },
   res: Response
 ) => {
   try {

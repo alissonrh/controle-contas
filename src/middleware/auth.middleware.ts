@@ -1,12 +1,17 @@
 import { Request, Response, NextFunction } from 'express'
-import dotenv from 'dotenv'
 import { verifyToken } from '../utils/jwt'
-import { JwtPayload } from '../utils/interfaces/jwt-payload.interface'
+import { jwtPayload } from '../utils/interfaces/jwt-payload.interface'
 
-dotenv.config()
+declare global {
+  namespace Express {
+    interface Request {
+      user?: jwtPayload
+    }
+  }
+}
 
 export const authenticateToken = (
-  req: Request & { user?: JwtPayload },
+  req: Request & { user?: jwtPayload },
   res: Response,
   next: NextFunction
 ) => {
@@ -16,8 +21,13 @@ export const authenticateToken = (
   }
 
   const token = authHeader.split(' ')[1]
+  if (!token) return res.status(401).json({ error: 'Token not provided' })
   try {
-    const decoded = verifyToken(token) as JwtPayload
+    const decoded = verifyToken(token) as jwtPayload
+    if (!decoded || typeof decoded !== 'object' || !decoded.userId) {
+      return res.status(403).json({ error: 'Invalid token payload' })
+    }
+
     req.user = decoded
     next()
   } catch {
