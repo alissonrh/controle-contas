@@ -2,9 +2,9 @@ import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import { PrismaClient } from '@prisma/client'
 import { userSchema } from '../validators/user.validators'
-import jwt, { SignOptions } from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { z } from 'zod'
+import { generateToken } from '../utils/jwt'
 dotenv.config()
 
 const prisma = new PrismaClient()
@@ -56,15 +56,9 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(401).json({ error: 'Invalid credentials' })
     }
 
-    console.log('User found:', process.env.JWT_SECRET)
-
     const payload = { userId: user.id, email: user.email }
-    const secret = process.env.JWT_SECRET as string
-    const options: SignOptions = {
-      expiresIn: '1d'
-    }
 
-    const token = jwt.sign(payload, secret, options)
+    const token = generateToken(payload)
 
     return res.status(200).json({ token })
   } catch {
