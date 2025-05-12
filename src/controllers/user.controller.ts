@@ -41,6 +41,7 @@ export const registerUser = async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'Erro interno no servidor' })
   }
 }
+
 export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body
 
