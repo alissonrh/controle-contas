@@ -29,6 +29,7 @@ model DebtSource {
   userId String
 
   debts  Debt[]
+  description String?
 }
 
 model Debt {

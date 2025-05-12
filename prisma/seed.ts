@@ -45,6 +45,16 @@ async function main() {
     }
   })
 
+  const fonte3 = await prisma.debtSource.create({
+    data: {
+      name: 'Empréstimo Pessoal',
+      type: 'PESSOA',
+      dueDay: 15,
+      userId: user1.id,
+      description: 'Empréstimo com amigo'
+    }
+  })
+
   // Dívidas
   const divida1 = await prisma.debt.create({
     data: {

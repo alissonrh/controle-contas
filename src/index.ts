@@ -8,6 +8,7 @@ import morgan from 'morgan'
 import { getCorsMiddleware } from './config/cors'
 import { router } from './routes'
 import userRoutes from './routes/user.route'
+import debtSourceRoutes from './routes/debtSource.routes'
 
 dotenv.config()
 
@@ -20,6 +21,7 @@ app.use(getCorsMiddleware())
 
 app.use('/api', router)
 app.use('/api/users', userRoutes)
+app.use('/api/debt-sources', debtSourceRoutes)
 
 // Swagger
 const swaggerDocument = YAML.load('src/docs/swagger.yaml')

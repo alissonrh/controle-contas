@@ -24,6 +24,8 @@ tags:
     description: Operações com dívidas
   - name: Installments
     description: Parcelas de dívidas
+  - name: DebtSources
+    description: Fontes de dívidas
 
 paths:
   /api/users/register:
@@ -261,3 +263,111 @@ paths:
           description: Lista de parcelas
         404:
           description: Dívida não encontrada
+
+  /api/debt-sources:
+    get:
+      summary: Lista todas as fontes de dívidas
+      tags: [DebtSources]
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Lista de fontes de dívidas
+        401:
+          description: Token inválido ou ausente
+
+    post:
+      summary: Cria uma nova fonte de dívida
+      tags: [DebtSources]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - dueDay
+                - type
+              properties:
+                name:
+                  type: string
+                type:
+                  type: string
+                  enum: ['CARTAO', 'BANCO', 'PESSOA', 'CREDIARIO', 'OUTRO'] 
+                dueDay:
+                  type: integer
+                  minimum: 1
+                  maximum: 31
+                description:
+                  type: string
+                  nullable: true
+                
+      responses:
+        201:
+          description: Fonte de dívida criada com sucesso
+        400:
+          description: Dados inválidos
+          
+  /api/debt-sources/{id}:
+    get:
+      summary: Retorna uma fonte de dívida específica
+      tags: [DebtSources]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Detalhes da fonte de dívida
+        404:
+          description: Fonte de dívida não encontrada
+
+    put:
+      summary: Atualiza uma fonte de dívida
+      tags: [DebtSources]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        200:
+          description: Fonte de dívida atualizada
+        400:
+          description: Dados inválidos
+
+    delete:
+      summary: Remove uma fonte de dívida
+      tags: [DebtSources]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: Fonte de dívida removida com sucesso
+        404:
+          description: Fonte de dívida não encontrada  

@@ -11,9 +11,9 @@ const prisma = new PrismaClient()
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
-    const parsed = userSchema.parse(req.body)
+    const parsedUserInput = userSchema.parse(req.body)
 
-    const { name, email, password } = parsed
+    const { name, email, password } = parsedUserInput
 
     const existingUser = await prisma.user.findUnique({ where: { email } })
     if (existingUser) {
