@@ -1,5 +1,9 @@
 # 💰 Controle de Contas
 
+> ⚠️ **Este projeto está em desenvolvimento.**  
+> Criado com o objetivo de aplicar conhecimentos em back-end com Node.js e boas práticas de segurança em APIs.  
+> Estou seguindo um checklist de segurança que inclui validação de dados com Zod, autenticação com JWT, uso de Helmet.js, rate limiting, entre outras práticas recomendadas para proteger aplicações Node.js.
+
 API REST para gerenciamento de finanças pessoais. Com ela, você pode cadastrar fontes de dívida (como cartão de crédito, bancos, empréstimos), registrar dívidas e organizar as parcelas. Ideal para quem quer ter controle total dos seus compromissos financeiros.
 
 ## 🚀 Tecnologias usadas
