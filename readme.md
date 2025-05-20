@@ -12,8 +12,6 @@ API REST para gerenciamento de finanças pessoais. Com ela, você pode cadastrar
 - JWT para autenticação
 - Dev Container para ambiente de desenvolvimento
 
----
-
 ## 🛠️ Como rodar o projeto
 
 ### Pré-requisitos
@@ -37,8 +35,6 @@ cd controle-contas
 
 Crie um arquivo `.env` na raiz do projeto com base no `.env.example`.
 
----
-
 ### 2. Suba os containers com Docker
 
 ```bash
@@ -48,8 +44,6 @@ docker-compose up -d
 ### 3. (Opcional) Abra no VS Code com Dev Container
 
 Se estiver usando o VS Code com a extensão **Dev Containers**, clique em **"Reopen in Container"** para rodar o projeto em um ambiente isolado, com todas as dependências já configuradas.
-
----
 
 ### 4. Rode as migrações e os seeds
 
@@ -67,8 +61,6 @@ npm run dev
 A API estará disponível em: [http://localhost:3000](http://localhost:3000)
 
 A documentação da API (Swagger) pode ser acessada em: [http://localhost:3000/api-docs](http://localhost:3000/api-docs)
-
----
 
 ## ✅ Funcionalidades
 
