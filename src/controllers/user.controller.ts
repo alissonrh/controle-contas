@@ -1,12 +1,13 @@
 import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
-
 import { userSchema } from '../validators/user.validators'
 import dotenv from 'dotenv'
-import { z } from 'zod'
 import { generateToken } from '../utils/jwt'
 import { jwtPayload } from '../utils/interfaces/jwt-payload.interface'
 import { prisma } from '../utils/lib/prisma'
+import * as UserService from '../service/user.service'
+import { User } from '@prisma/client'
+import { handleError } from '../utils/handleError'
 
 dotenv.config()
 
@@ -14,32 +15,14 @@ export const registerUser = async (req: Request, res: Response) => {
   try {
     const parsedUserInput = userSchema.parse(req.body)
 
-    const { name, email, password } = parsedUserInput
-
-    const existingUser = await prisma.user.findUnique({ where: { email } })
-    if (existingUser) {
-      return res.status(409).json({ error: 'Email already in use.' })
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10)
-
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword
-      }
-    })
+    const created: User = await UserService.createRegisterUser(parsedUserInput)
 
     return res.status(201).json({
       message: 'Usuário criado com sucesso',
-      user: { id: user.id, email: user.email }
+      user: { id: created.id, email: created.email }
     })
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      return res.status(400).json({ error: error.errors[0].message })
-    }
-    return res.status(500).json({ error: 'Erro interno no servidor' })
+    handleError(res, error)
   }
 }
 

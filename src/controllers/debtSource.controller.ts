@@ -7,6 +7,7 @@ import {
 } from '../utils/interfaces/debt-source.interface'
 import { jwtPayload } from '../utils/interfaces/jwt-payload.interface'
 import * as DebtSourceService from '../service/debtSource.service'
+import { DebtSource } from '@prisma/client'
 
 export const createDebtSource = async (
   req: Request & { user?: jwtPayload },
@@ -17,7 +18,10 @@ export const createDebtSource = async (
   try {
     const data: DebtSourceInput = debtSourceSchema.parse(req.body)
 
-    const created = await DebtSourceService.createDebtSource(userId, data)
+    const created: DebtSource = await DebtSourceService.createDebtSource(
+      userId,
+      data
+    )
 
     const response: DebtSourceResponse = {
       id: created.id,
