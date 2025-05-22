@@ -16,7 +16,11 @@ const app = express()
 app.use(express.json())
 app.use(morgan('dev'))
 app.use(getCorsMiddleware())
-app.use(helmet())
+app.use(
+  helmet({
+    contentSecurityPolicy: false
+  })
+)
 
 app.use('/api', router)
 app.use('/api/users', userRoutes)
