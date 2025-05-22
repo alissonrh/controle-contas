@@ -12,6 +12,7 @@
         "esbenp.prettier-vscode",
         "dbaeumer.vscode-eslint",
         "Prisma.prisma",
+        "cweijan.vscode-database-client2",
         "ms-azuretools.vscode-docker"
       ]
     }

@@ -7,7 +7,7 @@ import { jwtPayload } from '../utils/interfaces/jwt-payload.interface'
 import { prisma } from '../utils/lib/prisma'
 import * as UserService from '../service/user.service'
 import { User } from '@prisma/client'
-import { handleError } from '../utils/handleError'
+import { handleError } from '../utils/funcs/handleError'
 
 dotenv.config()
 

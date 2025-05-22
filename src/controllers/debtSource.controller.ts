@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { debtSourceSchema } from '../validators/debtSource.schema'
-import { handleError } from '../utils/handleError'
+import { handleError } from '../utils/funcs/handleError'
 import {
   DebtSourceInput,
   DebtSourceResponse
@@ -45,6 +45,7 @@ export const getAllDebtSources = async (
   res: Response
 ) => {
   const userId = req.user!.userId
+  console.log('userId', userId)
   try {
     const debtSourcesList = await DebtSourceService.getAllDebtSources(userId)
 
@@ -73,6 +74,7 @@ export const getDebtSourceById = async (
 
   try {
     const source = await DebtSourceService.getDebtSourceById(sourceId, userId)
+
     if (!source) {
       return res.status(404).json({ error: 'Debt source not found' })
     }
