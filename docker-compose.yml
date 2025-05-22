@@ -3,10 +3,12 @@ services:
     image: postgres:16
     container_name: postgres
     restart: always
+    env_file:
+      - .env
     environment:
-      POSTGRES_USER: alisson
-      POSTGRES_PASSWORD: secret123
-      POSTGRES_DB: controle_contas
+      - POSTGRES_USER={POSTGRES_USER}
+      - POSTGRES_PASSWORD={POSTGRES_PASSWORD}
+      - POSTGRES_DB={POSTGRES_DB}
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
@@ -21,8 +23,10 @@ services:
       - postgres
     ports:
       - '3000:3000'
+    env_file:
+      - .env
     environment:
-      DATABASE_URL: postgres://alisson:secret123@postgres:5432/controle_contas
+      DATABASE_URL: postgres://{POSTGRES_USER}:{POSTGRES_PASSWORD}@postgres:5432/{POSTGRES_DB}
     volumes:
       - .:/workspaces/personal-finance-app
     command: tail -f /dev/null

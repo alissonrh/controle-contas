@@ -26,37 +26,38 @@ API REST para gerenciamento de finanças pessoais. Com ela, você pode cadastrar
 
 ### Passo a passo
 
-1. **Clone o repositório**
+### 1. Clone o Repositório
 
 ```bash
 git clone https://github.com/seu-usuario/controle-contas.git
 cd controle-contas
 ```
 
-## 🛠️ Como rodar o projeto
-
-### 1. Configure as variáveis de ambiente
+### 2. Configure as variáveis de ambiente
 
 Crie um arquivo `.env` na raiz do projeto com base no `.env.example`.
 
-### 2. Suba os containers com Docker
+### 3. Suba os containers com Docker
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
-### 3. (Opcional) Abra no VS Code com Dev Container
+### 4. Entre no container
+Cmm o container rodando sem erros acesse o mesmo
 
-Se estiver usando o VS Code com a extensão **Dev Containers**, clique em **"Reopen in Container"** para rodar o projeto em um ambiente isolado, com todas as dependências já configuradas.
+```bash
+docker exec -it backend sh
+```
 
-### 4. Rode as migrações e os seeds
+### 5. Rode as migrações e os seeds
 
 ```bash
 npm run db:migrate
 npm run db:seed
 ```
 
-### 5. Inicie o servidor
+### 6. Inicie o servidor
 
 ```bash
 npm run dev
@@ -64,7 +65,14 @@ npm run dev
 
 A API estará disponível em: [http://localhost:3000](http://localhost:3000)
 
-A documentação da API (Swagger) pode ser acessada em: [http://localhost:3000/api-docs](http://localhost:3000/api-docs)
+A documentação da API (Swagger) pode ser acessada em: [http://localhost:3000/api-docs](http://localhost:3000/api-docs). Faço o login em User, pegue o token gerado e authorize no **Authorize** do Swagger
+
+## 💡 Alternativa (opcional)
+
+### Rodando com Dev Container no VS Code
+
+Se estiver usando o VS Code com a extensão **Dev Containers**, clique em **"Reopen in Container"** para rodar o projeto em um ambiente isolado, com todas as dependências já configuradas. Depois, execute os comandos dos passos 5 e 6 dentro do terminal do container.
+
 
 ## ✅ Funcionalidades
 
