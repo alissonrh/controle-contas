@@ -22,3 +22,36 @@ export const createRegisterUser = async (parsedUserInput: UserInput) => {
     }
   })
 }
+
+export const loginUser = async (email: string, password: string) => {
+  const user = await prisma.user.findUnique({ where: { email } })
+  if (!user) {
+    throw new BaseError(401, 'INVALID_CREDENTIALS')
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password)
+  if (!isMatch) {
+    throw new BaseError(401, 'INVALID_CREDENTIALS')
+  }
+
+  const { password: _password, ...safeUser } = user
+  return safeUser
+}
+
+export const getUserById = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      createdAt: true
+    }
+  })
+
+  if (!user) {
+    throw new BaseError(404, 'USER_NOT_FOUND')
+  }
+
+  return user
+}

@@ -1,15 +1,12 @@
 import { Request, Response } from 'express'
-import bcrypt from 'bcrypt'
 import { userSchema } from '../validators/user.validators'
-import dotenv from 'dotenv'
 import { generateToken } from '../utils/jwt'
 import { jwtPayload } from '../utils/interfaces/jwt-payload.interface'
-import { prisma } from '../utils/lib/prisma'
 import * as UserService from '../service/user.service'
 import { User } from '@prisma/client'
 import { handleError } from '../utils/funcs/handleError'
-
-dotenv.config()
+import { HttpStatusCode } from '../utils/constants/httpStatus'
+import { UserResponse } from '../utils/interfaces/user.interface'
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
@@ -17,8 +14,8 @@ export const registerUser = async (req: Request, res: Response) => {
 
     const created: User = await UserService.createRegisterUser(parsedUserInput)
 
-    return res.status(201).json({
-      message: 'Usuário criado com sucesso',
+    return res.status(HttpStatusCode.CREATED).json({
+      message: 'USER_CREATED_SUCCESSFULLY',
       user: { id: created.id, email: created.email }
     })
   } catch (error) {
@@ -27,27 +24,25 @@ export const registerUser = async (req: Request, res: Response) => {
 }
 
 export const loginUser = async (req: Request, res: Response) => {
-  const { email, password } = req.body
-
   try {
-    const user = await prisma.user.findUnique({ where: { email } })
-    if (!user) {
-      return res.status(401).json({ error: 'Invalid credentials' })
+    const { email, password } = req.body
+
+    if (!email || !password) {
+      return res
+        .status(HttpStatusCode.BAD_REQUEST)
+        .json({ error: 'EMAIL_AND_PASSWORD_ARE_REQUIRED' })
     }
 
-    const isMatch = await bcrypt.compare(password, user.password)
-    if (!isMatch) {
-      return res.status(401).json({ error: 'Invalid credentials' })
-    }
+    const user: UserResponse = await UserService.loginUser(email, password)
+    console.log('user', user)
 
     const payload = { userId: user.id, email: user.email }
 
     const token = generateToken(payload)
 
-    return res.status(200).json({ token })
+    return res.status(HttpStatusCode.SUCESS).json({ token })
   } catch (error) {
-    console.error('Create DebtSource error:', error)
-    return res.status(500).json({ error: 'Internal server error' })
+    handleError(res, error)
   }
 }
 
@@ -56,22 +51,16 @@ export const getMe = async (
   res: Response
 ) => {
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: req.user?.userId },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        createdAt: true
-      }
-    })
+    const user: UserResponse = await UserService.getUserById(req.user!.userId)
 
     if (!user) {
-      return res.status(404).json({ error: 'User not found' })
+      return res
+        .status(HttpStatusCode.NOT_FOUND)
+        .json({ error: 'USER_NOT_FOUND' })
     }
 
-    return res.json(user)
-  } catch {
-    return res.status(500).json({ error: 'Internal server error' })
+    return res.json({ user })
+  } catch (error) {
+    handleError(res, error)
   }
 }

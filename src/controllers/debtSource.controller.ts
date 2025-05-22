@@ -8,6 +8,7 @@ import {
 import { jwtPayload } from '../utils/interfaces/jwt-payload.interface'
 import * as DebtSourceService from '../service/debtSource.service'
 import { DebtSource } from '@prisma/client'
+import { HttpStatusCode } from '../utils/constants/httpStatus'
 
 export const createDebtSource = async (
   req: Request & { user?: jwtPayload },
@@ -31,8 +32,8 @@ export const createDebtSource = async (
       description: created.description ?? undefined
     }
 
-    return res.status(201).json({
-      message: 'Debt source created successfully',
+    return res.status(HttpStatusCode.SUCESS).json({
+      message: 'DEBT_SOURCE_CREATED_SUCCESSFULLY',
       data: response
     })
   } catch (error) {
@@ -59,7 +60,7 @@ export const getAllDebtSources = async (
       })
     )
 
-    res.status(200).json({ data: response })
+    res.status(HttpStatusCode.SUCESS).json({ data: response })
   } catch (error) {
     handleError(res, error)
   }
@@ -76,7 +77,9 @@ export const getDebtSourceById = async (
     const source = await DebtSourceService.getDebtSourceById(sourceId, userId)
 
     if (!source) {
-      return res.status(404).json({ error: 'Debt source not found' })
+      return res
+        .status(HttpStatusCode.NOT_FOUND)
+        .json({ error: 'DEBT_SOURCE_NOT_FOUD' })
     }
 
     const response: DebtSourceResponse = {
@@ -87,7 +90,7 @@ export const getDebtSourceById = async (
       dueDay: source.dueDay
     }
 
-    return res.status(200).json({ data: response })
+    return res.status(HttpStatusCode.SUCESS).json({ data: response })
   } catch (error) {
     handleError(res, error)
   }
@@ -117,8 +120,8 @@ export const updateDebtSource = async (
       dueDay: updatedSource.dueDay
     }
 
-    return res.status(200).json({
-      message: 'Debt source updated successfully',
+    return res.status(HttpStatusCode.SUCESS).json({
+      message: 'DEBT_SOURCE_UPDATED_SUCCESSFULLY',
       data: response
     })
   } catch (error) {
@@ -135,10 +138,12 @@ export const deleteDebtSource = async (
   try {
     const source = await DebtSourceService.getDebtSourceById(sourceId, userId)
     if (!source) {
-      return res.status(404).json({ error: 'Debt source not found' })
+      return res
+        .status(HttpStatusCode.NOT_FOUND)
+        .json({ error: 'DEBT_SOURCE_NOT_FOUD' })
     }
 
-    res.status(200).json({ message: 'Debt source deleted successfully' })
+    res.status(HttpStatusCode.SUCESS).json({ message: 'DEBT_SOURCE_DELETED_SUCCESSFULLY' })
   } catch (error) {
     handleError(res, error)
   }

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { verifyToken } from '../utils/jwt'
 import { jwtPayload } from '../utils/interfaces/jwt-payload.interface'
+import { HttpStatusCode } from '../utils/constants/httpStatus'
 
 declare global {
   namespace Express {
@@ -17,20 +18,29 @@ export const authenticateToken = (
 ) => {
   const authHeader = req.headers.authorization
   if (!authHeader?.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Token missing or invalid' })
+    return res
+      .status(HttpStatusCode.UNAUTHORIZED)
+      .json({ error: 'TOKEN_MISSING_OR_INVALID' })
   }
 
   const token = authHeader.split(' ')[1]
-  if (!token) return res.status(401).json({ error: 'Token not provided' })
+  if (!token)
+    return res
+      .status(HttpStatusCode.UNAUTHORIZED)
+      .json({ error: 'TOKEN_MISSING_OR_INVALID' })
   try {
     const decoded = verifyToken(token) as jwtPayload
     if (!decoded || typeof decoded !== 'object' || !decoded.userId) {
-      return res.status(403).json({ error: 'Invalid token payload' })
+      return res
+        .status(HttpStatusCode.FORBIDDEN)
+        .json({ error: 'TOKEN_MISSING_OR_INVALID' })
     }
 
     req.user = decoded
     next()
   } catch {
-    return res.status(403).json({ error: 'Invalid token' })
+    return res
+      .status(HttpStatusCode.FORBIDDEN)
+      .json({ error: 'TOKEN_MISSING_OR_INVALID' })
   }
 }
