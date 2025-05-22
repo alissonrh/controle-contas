@@ -1,10 +1,6 @@
 import cors, { CorsOptions } from 'cors'
 
 export function getCorsMiddleware() {
-  if (process.env.NODE_ENV !== 'development') {
-    return (req: any, res: any, next: any) => next() // CORS desativado fora do dev
-  }
-
   const allowedOrigins = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
