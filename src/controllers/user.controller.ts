@@ -34,13 +34,12 @@ export const loginUser = async (req: Request, res: Response) => {
     }
 
     const user: UserResponse = await UserService.loginUser(email, password)
-    console.log('user', user)
 
     const payload = { userId: user.id, email: user.email }
 
     const token = generateToken(payload)
 
-    return res.status(HttpStatusCode.SUCESS).json({ token })
+    return res.status(HttpStatusCode.SUCCESS).json({ token })
   } catch (error) {
     handleError(res, error)
   }
@@ -52,12 +51,6 @@ export const getMe = async (
 ) => {
   try {
     const user: UserResponse = await UserService.getUserById(req.user!.userId)
-
-    if (!user) {
-      return res
-        .status(HttpStatusCode.NOT_FOUND)
-        .json({ error: 'USER_NOT_FOUND' })
-    }
 
     return res.json({ user })
   } catch (error) {

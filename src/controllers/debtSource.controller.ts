@@ -32,7 +32,7 @@ export const createDebtSource = async (
       description: created.description ?? undefined
     }
 
-    return res.status(HttpStatusCode.SUCESS).json({
+    return res.status(HttpStatusCode.SUCCESS).json({
       message: 'DEBT_SOURCE_CREATED_SUCCESSFULLY',
       data: response
     })
@@ -60,7 +60,7 @@ export const getAllDebtSources = async (
       })
     )
 
-    res.status(HttpStatusCode.SUCESS).json({ data: response })
+    res.status(HttpStatusCode.SUCCESS).json({ data: response })
   } catch (error) {
     handleError(res, error)
   }
@@ -90,7 +90,7 @@ export const getDebtSourceById = async (
       dueDay: source.dueDay
     }
 
-    return res.status(HttpStatusCode.SUCESS).json({ data: response })
+    return res.status(HttpStatusCode.SUCCESS).json({ data: response })
   } catch (error) {
     handleError(res, error)
   }
@@ -120,7 +120,7 @@ export const updateDebtSource = async (
       dueDay: updatedSource.dueDay
     }
 
-    return res.status(HttpStatusCode.SUCESS).json({
+    return res.status(HttpStatusCode.SUCCESS).json({
       message: 'DEBT_SOURCE_UPDATED_SUCCESSFULLY',
       data: response
     })
@@ -143,7 +143,9 @@ export const deleteDebtSource = async (
         .json({ error: 'DEBT_SOURCE_NOT_FOUD' })
     }
 
-    res.status(HttpStatusCode.SUCESS).json({ message: 'DEBT_SOURCE_DELETED_SUCCESSFULLY' })
+    res
+      .status(HttpStatusCode.SUCCESS)
+      .json({ message: 'DEBT_SOURCE_DELETED_SUCCESSFULLY' })
   } catch (error) {
     handleError(res, error)
   }
