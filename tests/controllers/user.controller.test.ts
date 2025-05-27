@@ -36,9 +36,8 @@ describe('user.controller', () => {
   describe('registerUser', () => {
     it('should register user and return success response', async () => {
       const parsedInput = { email: 'test@example.com', password: 'pass' }
-      const createdUser = { id: 1, email: 'test@example.com' }(
-        userSchema.parse as jest.Mock
-      ).mockReturnValue(parsedInput)
+      const createdUser = { id: 1, email: 'test@example.com' }
+      ;(userSchema.parse as jest.Mock).mockReturnValue(parsedInput)
       ;(UserService.createRegisterUser as jest.Mock).mockResolvedValue(
         createdUser
       )
@@ -56,9 +55,8 @@ describe('user.controller', () => {
     })
 
     it('should handle error if thrown', async () => {
-      const error = new Error('fail')(
-        userSchema.parse as jest.Mock
-      ).mockImplementation(() => {
+      const error = new Error('fail')
+      ;(userSchema.parse as jest.Mock).mockImplementation(() => {
         throw error
       })
       await registerUser(req, res)
@@ -79,9 +77,9 @@ describe('user.controller', () => {
     it('should login user and return token', async () => {
       req.body = { email: 'test@example.com', password: 'pass' }
       const user = { id: 1, email: 'test@example.com' }
-      const token = 'jwt.token'(UserService.loginUser as jest.Mock)
-        .mockResolvedValue(user)(generateToken as jest.Mock)
-        .mockReturnValue(token)
+      const token = 'jwt.token'
+      ;(UserService.loginUser as jest.Mock).mockResolvedValue(user)
+      ;(generateToken as jest.Mock).mockReturnValue(token)
 
       await loginUser(req, res)
 
@@ -99,9 +97,8 @@ describe('user.controller', () => {
 
     it('should handle error if thrown', async () => {
       req.body = { email: 'test@example.com', password: 'pass' }
-      const error = new Error('fail')(
-        UserService.loginUser as jest.Mock
-      ).mockRejectedValue(error)
+      const error = new Error('fail')
+      ;(UserService.loginUser as jest.Mock).mockRejectedValue(error)
       await loginUser(req, res)
       expect(handleError).toHaveBeenCalledWith(res, error)
     })
@@ -110,9 +107,8 @@ describe('user.controller', () => {
   describe('getMe', () => {
     it('should return user info', async () => {
       req.user = { userId: 1, email: 'test@example.com' }
-      const user = { id: 1, email: 'test@example.com' }(
-        UserService.getUserById as jest.Mock
-      ).mockResolvedValue(user)
+      const user = { id: 1, email: 'test@example.com' }
+      ;(UserService.getUserById as jest.Mock).mockResolvedValue(user)
 
       await getMe(req, res)
 
@@ -122,9 +118,8 @@ describe('user.controller', () => {
 
     it('should handle error if thrown', async () => {
       req.user = { userId: 1, email: 'test@example.com' }
-      const error = new Error('fail')(
-        UserService.getUserById as jest.Mock
-      ).mockRejectedValue(error)
+      const error = new Error('fail')
+      ;(UserService.getUserById as jest.Mock).mockRejectedValue(error)
       await getMe(req, res)
       expect(handleError).toHaveBeenCalledWith(res, error)
     })

@@ -14,8 +14,6 @@
     "db:seed": "ts-node prisma/seed.ts",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "coverage:open": "xdg-open coverage/lcov-report/index.html",
-    "test:coverage:open": "npm run test:coverage && npm run coverage:open",
     "test:watch": "jest --watchAll",
     "test:watch:coverage": "jest --watchAll --coverage"
   },
