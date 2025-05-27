@@ -24,3 +24,6 @@ pgdata
 # Sistema
 .DS_Store
 Thumbs.db
+
+# Testes
+/coverage
