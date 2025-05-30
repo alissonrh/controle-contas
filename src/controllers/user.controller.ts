@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { userSchema } from '../validators/user.validators'
-import { generateToken } from '../utils/jwt'
+import { signAccessToken, signRefreshToken } from '../utils/jwt'
 import { jwtPayload } from '../utils/interfaces/jwt-payload.interface'
 import * as UserService from '../service/user.service'
 import { User } from '@prisma/client'
@@ -10,9 +10,11 @@ import { UserResponse } from '../utils/interfaces/user.interface'
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
-    const parsedUserInput = userSchema.parse(req.body)
+    const validatedUserInput = userSchema.parse(req.body)
 
-    const created: User = await UserService.createRegisterUser(parsedUserInput)
+    const created: User = await UserService.createRegisterUser(
+      validatedUserInput
+    )
 
     return res.status(HttpStatusCode.CREATED).json({
       message: 'USER_CREATED_SUCCESSFULLY',
@@ -37,9 +39,26 @@ export const loginUser = async (req: Request, res: Response) => {
 
     const payload = { userId: user.id, email: user.email }
 
-    const token = generateToken(payload)
+    const accessToken = signAccessToken(payload)
+    const refreshToken = signRefreshToken(payload)
 
-    return res.status(HttpStatusCode.SUCCESS).json({ token })
+    console.log('Access Token:', accessToken)
+
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 15 * 60 * 1000 // 15 minutos
+    })
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 dias
+    })
+
+    return res.status(HttpStatusCode.SUCCESS).json({ message: 'LOGIN_SUCCESS' })
   } catch (error) {
     handleError(res, error)
   }

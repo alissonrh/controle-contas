@@ -7,7 +7,6 @@ import morgan from 'morgan'
 dotenv.config()
 
 import { getCorsMiddleware } from './config/cors'
-import { router } from './routes'
 import userRoutes from './routes/user.route'
 import debtSourceRoutes from './routes/debtSource.routes'
 
@@ -22,7 +21,6 @@ app.use(
   })
 )
 
-app.use('/api', router)
 app.use('/api/users', userRoutes)
 app.use('/api/debt-sources', debtSourceRoutes)
 
