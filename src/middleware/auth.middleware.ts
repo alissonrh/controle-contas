@@ -16,14 +16,8 @@ export const authenticateToken = (
   res: Response,
   next: NextFunction
 ) => {
-  const authHeader = req.headers.authorization
-  if (!authHeader?.startsWith('Bearer ')) {
-    return res
-      .status(HttpStatusCode.UNAUTHORIZED)
-      .json({ error: 'TOKEN_MISSING_OR_INVALID' })
-  }
+  const token = req.cookies?.accessToken
 
-  const token = authHeader.split(' ')[1]
   if (!token)
     return res
       .status(HttpStatusCode.UNAUTHORIZED)

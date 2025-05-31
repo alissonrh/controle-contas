@@ -1,9 +1,11 @@
 import express from 'express'
 import helmet from 'helmet'
 import dotenv from 'dotenv'
+import cors from 'cors'
 import swaggerUi from 'swagger-ui-express'
 import YAML from 'yamljs'
 import morgan from 'morgan'
+import cookieParser from 'cookie-parser'
 dotenv.config()
 
 import { getCorsMiddleware } from './config/cors'
@@ -18,6 +20,13 @@ app.use(getCorsMiddleware())
 app.use(
   helmet({
     contentSecurityPolicy: false
+  })
+)
+app.use(cookieParser())
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    credentials: true
   })
 )
 
