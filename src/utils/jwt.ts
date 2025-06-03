@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 
 const JWT_SECRET = process.env.JWT_SECRET!
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET!
-const ACCESS_TOKEN_EXPIRES_IN = '15m'
+const ACCESS_TOKEN_EXPIRES_IN = '1m'
 const REFRESH_TOKEN_EXPIRES_IN = '7d'
 
 export function signAccessToken(payload: object) {

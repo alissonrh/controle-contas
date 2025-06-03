@@ -4,8 +4,10 @@ import { Request, Response } from 'express'
 import { HttpStatusCode } from '../utils/constants/httpStatus'
 import { jwtPayload } from '../utils/interfaces/jwt-payload.interface'
 import { handleError } from '../utils/funcs/handleError'
+import { log } from 'console'
 
 export const refreshTokenHandler = (req: Request, res: Response) => {
+  log('Received request to refresh access token')
   const token = req.cookies?.refreshToken
 
   if (!token) {
@@ -31,6 +33,11 @@ export const refreshTokenHandler = (req: Request, res: Response) => {
       sameSite: 'lax',
       maxAge: 15 * 60 * 1000 // 15 minutos
     })
+
+    console.log('New access token generated:', newAccessToken)
+    console.log('Refresh token payload:', payload)
+    console.log('Refresh token:', token)
+    console.log('Access token cookie set with maxAge:', 15 * 60 * 1000)
 
     return res
       .status(HttpStatusCode.SUCCESS)

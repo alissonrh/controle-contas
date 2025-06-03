@@ -18,23 +18,26 @@ export const authenticateToken = (
 ) => {
   const token = req.cookies?.accessToken
 
-  if (!token)
+  if (!token) {
     return res
       .status(HttpStatusCode.UNAUTHORIZED)
-      .json({ error: 'TOKEN_MISSING_OR_INVALID' })
+      .json({ error: 'ACCESS_TOKEN_NOT_FOUND' })
+  }
+
   try {
     const decoded = verifyToken(token) as jwtPayload
+
     if (!decoded || typeof decoded !== 'object' || !decoded.userId) {
       return res
         .status(HttpStatusCode.FORBIDDEN)
-        .json({ error: 'TOKEN_MISSING_OR_INVALID' })
+        .json({ error: 'INVALID_ACCESS_TOKEN_PAYLOAD' })
     }
 
     req.user = decoded
     next()
-  } catch {
+  } catch (err) {
     return res
-      .status(HttpStatusCode.FORBIDDEN)
-      .json({ error: 'TOKEN_MISSING_OR_INVALID' })
+      .status(HttpStatusCode.UNAUTHORIZED)
+      .json({ error: 'ACCESS_TOKEN_INVALID_OR_EXPIRED' })
   }
 }

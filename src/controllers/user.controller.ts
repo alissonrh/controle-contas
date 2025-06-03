@@ -42,8 +42,6 @@ export const loginUser = async (req: Request, res: Response) => {
     const accessToken = signAccessToken(payload)
     const refreshToken = signRefreshToken(payload)
 
-    console.log('Access Token:', accessToken)
-
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
