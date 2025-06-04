@@ -3,7 +3,6 @@ import { userSchema } from '../validators/user.validators'
 import { signAccessToken, signRefreshToken } from '../utils/jwt'
 import { jwtPayload } from '../utils/interfaces/jwt-payload.interface'
 import * as UserService from '../service/user.service'
-import { User } from '@prisma/client'
 import { handleError } from '../utils/funcs/handleError'
 import { HttpStatusCode } from '../utils/constants/httpStatus'
 import { UserResponse } from '../utils/interfaces/user.interface'
@@ -12,7 +11,7 @@ export const registerUser = async (req: Request, res: Response) => {
   try {
     const validatedUserInput = userSchema.parse(req.body)
 
-    const created: User = await UserService.createRegisterUser(
+    const created = await UserService.createRegisterUser(
       validatedUserInput
     )
 
