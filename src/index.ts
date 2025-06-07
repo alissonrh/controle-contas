@@ -6,6 +6,7 @@ import swaggerUi from 'swagger-ui-express'
 import YAML from 'yamljs'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
+import path from 'path'
 dotenv.config()
 
 import { getCorsMiddleware } from './config/cors'
@@ -41,8 +42,32 @@ app.use('/api/debt-sources', debtSourceRoutes)
 app.use('/api', refreshToken)
 
 // Swagger
+
+app.use(express.static(path.join(__dirname, 'utils', 'public')))
+
+app.get('/api-docs/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'utils', 'public', 'swagger-login.html'))
+})
+
 const swaggerDocument = YAML.load('src/utils/docs/swagger.yaml')
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+app.use(
+  '/api-docs',
+  (
+    req: { cookies: { accessToken: any } },
+    res: { redirect: (arg0: string) => any },
+    next: () => any
+  ) => (req.cookies.accessToken ? next() : res.redirect('/api-docs/login')),
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument, {
+    swaggerOptions: {
+      withCredentials: true,
+      requestInterceptor: (req: { credentials: string }) => {
+        req.credentials = 'include'
+        return req
+      }
+    }
+  })
+)
 
 app.listen(3000, () => {
   console.log('🚀 Server running on http://localhost:3000')

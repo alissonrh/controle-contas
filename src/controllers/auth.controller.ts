@@ -34,11 +34,6 @@ export const refreshTokenHandler = (req: Request, res: Response) => {
       maxAge: 15 * 60 * 1000 // 15 minutos
     })
 
-    console.log('New access token generated:', newAccessToken)
-    console.log('Refresh token payload:', payload)
-    console.log('Refresh token:', token)
-    console.log('Access token cookie set with maxAge:', 15 * 60 * 1000)
-
     return res
       .status(HttpStatusCode.SUCCESS)
       .json({ message: 'ACCESS_TOKEN_REFRESHED' })
