@@ -43,7 +43,7 @@
 ## 7. HTTPS e Produção
 
 - [x] Use HTTPS sempre (pode usar um proxy como Nginx + Certbot).
-- [ ] Redirecione requisições HTTP para HTTPS.
+- [x] Redirecione requisições HTTP para HTTPS.
 - [ ] Remova **rotas de teste, console logs e endpoints de debug** antes de ir pra prod.
 
 ## 8. Proteção contra ataques
