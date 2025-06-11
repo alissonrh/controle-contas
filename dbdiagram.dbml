@@ -1,0 +1,33 @@
+Table users {
+  id uuid [pk]
+  name varchar
+  email varchar [unique]
+  password varchar
+  created_at timestamp
+}
+
+Table debt_sources {
+  id uuid [pk]
+  name varchar
+  type varchar
+  due_day int
+  user_id uuid [ref: > users.id]
+  created_at timestamp
+}
+
+Table debts {
+  id uuid [pk]
+  description varchar
+  debt_source_id uuid [ref: > debt_sources.id]
+  user_id uuid [ref: > users.id]
+  created_at timestamp
+}
+
+Table installments {
+  id uuid [pk]
+  debt_id uuid [ref: > debts.id]
+  amount decimal
+  month int
+  year int
+  status varchar
+}

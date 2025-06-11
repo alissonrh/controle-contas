@@ -1,15 +1,20 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>Login para Swagger</title>
-</head>
-<body>
-  <h2>Login necessário</h2>
-  <form method="POST" action="/api/users/login?redirect=/api-docs">
-    <input name="email" type="email" placeholder="E‑mail" required/><br>
-    <input name="password" type="password" placeholder="Senha" required/><br>
-    <button type="submit">Entrar</button>
-  </form>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login para Swagger</title>
+  </head>
+  <body>
+    <h2>Login necessário</h2>
+    <form method="POST" action="http://localhost:3000/api-docs">
+      <input name="email" type="email" placeholder="Email" required /><br />
+      <input
+        name="password"
+        type="password"
+        placeholder="Senha"
+        required
+      /><br />
+      <button type="submit">Entrar</button>
+    </form>
+  </body>
 </html>

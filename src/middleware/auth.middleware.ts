@@ -3,13 +3,11 @@ import { verifyToken } from '../utils/jwt'
 import { jwtPayload } from '../utils/interfaces/jwt-payload.interface'
 import { HttpStatusCode } from '../utils/constants/httpStatus'
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: jwtPayload
-    }
-  }
-}
+// declare module 'express-serve-static-core' {
+//   interface Request {
+//     user?: jwtPayload
+//   }
+// }
 
 export const authenticateToken = (
   req: Request & { user?: jwtPayload },
@@ -35,7 +33,7 @@ export const authenticateToken = (
 
     req.user = decoded
     next()
-  } catch (err) {
+  } catch {
     return res
       .status(HttpStatusCode.UNAUTHORIZED)
       .json({ error: 'ACCESS_TOKEN_INVALID_OR_EXPIRED' })

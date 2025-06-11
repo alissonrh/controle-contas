@@ -1,7 +1,6 @@
 import express from 'express'
 import helmet from 'helmet'
 import dotenv from 'dotenv'
-import cors from 'cors'
 import swaggerUi from 'swagger-ui-express'
 import YAML from 'yamljs'
 import morgan from 'morgan'
@@ -18,24 +17,13 @@ const app = express()
 
 app.use(express.json())
 app.use(morgan('dev'))
-app.use(getCorsMiddleware())
 app.use(
   helmet({
     contentSecurityPolicy: false
   })
 )
 app.use(cookieParser())
-app.use(
-  cors({
-    origin: [
-      'http://localhost:3000',
-      'http://127.0.0.1:3000',
-      'http://0.0.0.0:3000',
-      'http://localhost:5173'
-    ],
-    credentials: true
-  })
-)
+app.use(getCorsMiddleware())
 
 app.use('/api/users', userRoutes)
 app.use('/api/debt-sources', debtSourceRoutes)
@@ -53,9 +41,9 @@ const swaggerDocument = YAML.load('src/utils/docs/swagger.yaml')
 app.use(
   '/api-docs',
   (
-    req: { cookies: { accessToken: any } },
-    res: { redirect: (arg0: string) => any },
-    next: () => any
+    req: { cookies: { accessToken: unknown } },
+    res: { redirect: (arg0: string) => unknown },
+    next: () => unknown
   ) => (req.cookies.accessToken ? next() : res.redirect('/api-docs/login')),
   swaggerUi.serve,
   swaggerUi.setup(swaggerDocument, {

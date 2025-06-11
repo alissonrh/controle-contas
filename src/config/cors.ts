@@ -1,15 +1,18 @@
 import cors, { CorsOptions } from 'cors'
 
 export function getCorsMiddleware() {
-  const allowedOrigins = [
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    'http://0.0.0.0:3000',
-    'http://localhost:5173'
-  ]
+  const allowedOrigins =
+    process.env.NODE_ENV === 'production'
+      ? ['https://app.controlecontas.com.br']
+      : [
+          'http://localhost:3000',
+          'http://127.0.0.1:3000',
+          'http://0.0.0.0:3000',
+          'http://localhost:5173'
+        ]
 
   const corsOptions: CorsOptions = {
-    origin: function (origin, callback) {
+    origin(origin, callback) {
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true)
       } else {
