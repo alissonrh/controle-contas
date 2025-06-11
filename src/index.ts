@@ -24,6 +24,17 @@ app.use(
 )
 app.use(cookieParser())
 app.use(getCorsMiddleware())
+app.use((req, res, next) => {
+  const isProd = process.env.NODE_ENV === 'production'
+  const isHttp = req.headers['x-forwarded-proto'] === 'http'
+
+  if (isProd && isHttp) {
+    const httpsUrl = `https://${req.headers.host}${req.url}`
+    return res.redirect(301, httpsUrl)
+  }
+
+  next()
+})
 
 app.use('/api/users', userRoutes)
 app.use('/api/debt-sources', debtSourceRoutes)
