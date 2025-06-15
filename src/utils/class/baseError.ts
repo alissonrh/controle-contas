@@ -1,9 +1,11 @@
 export class BaseError extends Error {
-  status: number
-
-  constructor(status: number, message: string) {
+  constructor(
+    public status: number,
+    message: string
+  ) {
     super(message)
-    this.name = 'BaseError'
+    this.name = this.constructor.name
     this.status = status
+    Error.captureStackTrace(this, this.constructor)
   }
 }

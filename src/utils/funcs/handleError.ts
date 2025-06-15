@@ -14,7 +14,6 @@ export const handleError = (res: Response, error: unknown): Response => {
     return res.status(error.status).json({ error: error.message })
   }
 
-  console.error('Unhandled error:', error)
   return res
     .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
     .json({ error: 'INTERNAL_SERVER_ERROR' })

@@ -44,10 +44,11 @@ docker compose up -d
 ```
 
 ### 4. Entre no container
+
 Cmm o container rodando sem erros acesse o mesmo
 
 ```bash
-docker exec -it backend sh
+docker exec -it backend_personal-finance-app sh
 ```
 
 ### 5. Rode as migrações e os seeds
@@ -72,7 +73,6 @@ A documentação da API (Swagger) pode ser acessada em: [http://localhost:3000/a
 ### Rodando com Dev Container no VS Code
 
 Se estiver usando o VS Code com a extensão **Dev Containers**, clique em **"Reopen in Container"** para rodar o projeto em um ambiente isolado, com todas as dependências já configuradas. Depois, execute os comandos dos passos 5 e 6 dentro do terminal do container.
-
 
 ## ✅ Funcionalidades
 

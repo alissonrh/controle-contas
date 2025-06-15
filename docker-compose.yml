@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:16
-    container_name: postgres
+    container_name: postgres_personal-finance-app
     restart: always
     env_file:
       - .env
@@ -14,11 +14,11 @@ services:
     ports:
       - '5432:5432'
 
-  backend:
+  backend_app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: backend
+    container_name: backend_personal-finance-app
     depends_on:
       - postgres
     ports:
