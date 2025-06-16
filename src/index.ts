@@ -12,6 +12,7 @@ import { getCorsMiddleware } from './config/cors'
 import userRoutes from './routes/user.route'
 import debtSourceRoutes from './routes/debtSource.routes'
 import refreshToken from './routes/auth.routes'
+import debtRouutes from './routes/debt.routes'
 
 const app = express()
 
@@ -36,8 +37,11 @@ app.use((req, res, next) => {
   next()
 })
 
+// Routes
+
 app.use('/api/users', userRoutes)
 app.use('/api/debt-sources', debtSourceRoutes)
+app.use('/api/debt', debtRouutes)
 app.use('/api', refreshToken)
 
 // Swagger

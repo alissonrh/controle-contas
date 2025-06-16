@@ -3,12 +3,6 @@ import { verifyToken } from '../utils/jwt'
 import { jwtPayload } from '../utils/interfaces/jwt-payload.interface'
 import { HttpStatusCode } from '../utils/constants/httpStatus'
 
-// declare module 'express-serve-static-core' {
-//   interface Request {
-//     user?: jwtPayload
-//   }
-// }
-
 export const authenticateToken = (
   req: Request & { user?: jwtPayload },
   res: Response,

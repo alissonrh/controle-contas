@@ -58,46 +58,53 @@ async function main() {
   // Dívidas
   const divida1 = await prisma.debt.create({
     data: {
+      title: 'Compra de notebook Dell',
+      amount: 1500.0,
+      createdAt: new Date('2025-05-10'),
       description: 'Compra notebook',
       userId: user1.id,
-      debtSourceId: fonte1.id
+      debtSourceId: fonte1.id,
+      installmentsNumber: 10
     }
   })
 
   const divida2 = await prisma.debt.create({
     data: {
-      description: 'Viagem RJ',
+      title: 'Viagem GAGA',
+      amount: 1500.0,
+      createdAt: new Date('2025-05-10'),
       userId: user2.id,
-      debtSourceId: fonte2.id
+      debtSourceId: fonte2.id,
+      installmentsNumber: 3
     }
   })
 
   // Parcelas
-  await prisma.installment.createMany({
-    data: [
-      {
-        amount: 1500.0,
-        month: 5,
-        year: 2025,
-        status: 'PENDING',
-        type: 'ELETRONICO',
-        debtId: divida1.id
-      },
-      {
-        amount: 1800.0,
-        month: 5,
-        year: 2025,
-        status: 'PAID',
-        type: 'VIAGEM',
-        debtId: divida2.id
-      }
-    ]
-  })
+  // await prisma.installment.createMany({
+  //   data: [
+  //     {
+  //       amount: 1500.0,
+  //       month: 5,
+  //       year: 2025,
+  //       status: 'PENDING',
+  //       type: 'ELETRONICO',
+  //       debtId: divida1.id
+  //     },
+  //     {
+  //       amount: 1800.0,
+  //       month: 5,
+  //       year: 2025,
+  //       status: 'PAID',
+  //       type: 'VIAGEM',
+  //       debtId: divida2.id
+  //     }
+  //   ]
+  // })
 
   console.log('🌱 Seeds criadas com sucesso!')
 }
 
-main()
+main()  dueDate: string
   .catch((e) => {
     console.error(e)
     process.exit(1)

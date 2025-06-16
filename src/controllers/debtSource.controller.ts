@@ -46,7 +46,6 @@ export const getAllDebtSources = async (
   res: Response
 ) => {
   const userId = req.user!.userId
-  console.log('userId', userId)
   try {
     const debtSourcesList = await DebtSourceService.getAllDebtSources(userId)
 
