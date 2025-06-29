@@ -9,22 +9,23 @@ import path from 'path'
 dotenv.config()
 
 import { getCorsMiddleware } from './config/cors'
+// routes imports
 import userRoutes from './routes/user.route'
 import debtSourceRoutes from './routes/debtSource.routes'
 import refreshToken from './routes/auth.routes'
 import debtRouutes from './routes/debt.routes'
+import tripRoutes from './routes/trip.routes'
 
 const app = express()
 
-app.use(express.json())
+// Middleware
 app.use(morgan('dev'))
-app.use(
-  helmet({
-    contentSecurityPolicy: false
-  })
-)
-app.use(cookieParser())
+app.use(helmet({ contentSecurityPolicy: false }))
 app.use(getCorsMiddleware())
+app.use(express.json())
+app.use(cookieParser())
+
+// Redirect HTTP to HTTPS in production
 app.use((req, res, next) => {
   const isProd = process.env.NODE_ENV === 'production'
   const isHttp = req.headers['x-forwarded-proto'] === 'http'
@@ -43,6 +44,7 @@ app.use('/api/users', userRoutes)
 app.use('/api/debt-sources', debtSourceRoutes)
 app.use('/api/debt', debtRouutes)
 app.use('/api', refreshToken)
+app.use('/api/trips', tripRoutes)
 
 // Swagger
 
@@ -72,7 +74,9 @@ app.use(
   })
 )
 
-app.listen(3000, () => {
-  console.log('🚀 Server running on http://localhost:3000')
-  console.log('📚 Documentação Swagger: http://localhost:3000/api-docs')
+// server running
+
+app.listen(3001, () => {
+  console.log('🚀 Server running on http://localhost:3001')
+  console.log('📚 Documentação Swagger: http://localhost:3001/api-docs')
 })

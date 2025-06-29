@@ -18,13 +18,10 @@ export const getAllDebtSources = async (userId: string) => {
 }
 
 export const getDebtSourceById = async (id: string, userId: string) => {
-  const debtSource = await prisma.debtSource.findUnique({
-    where: { id }
+  const debtSource = await prisma.debtSource.findFirst({
+    where: { id, userId }
   })
-
-  if (!debtSource || debtSource.userId !== userId) {
-    return null
-  }
+  if (!debtSource) return null
 
   return debtSource
 }

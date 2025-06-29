@@ -1,6 +1,5 @@
 import { prisma } from '../utils/lib/prisma'
-import { DebtInput } from '../utils/interfaces/debt.interface'
-import { log } from 'console'
+import { DebtInput, DebtResponse } from '../utils/interfaces/debt.interface'
 import { BaseError } from '../utils/class/baseError'
 import { HttpStatusCode } from '../utils/constants/httpStatus'
 
@@ -13,10 +12,14 @@ import { HttpStatusCode } from '../utils/constants/httpStatus'
 export const createDebt = async (
   data: DebtInput,
   userId: string
-): Promise<any> => {
-  const debtSource = await prisma.debtSource.findUnique({
-    where: { id: data.debtSourceId }
+): Promise<DebtResponse> => {
+  const debtSource = await prisma.debtSource.findFirst({
+    where: {
+      userId: userId,
+      id: data.debtSourceId
+    }
   })
+
   if (!debtSource) {
     throw new BaseError(HttpStatusCode.BAD_REQUEST, 'DEBT_SOURCE_NOT_FOUND')
   }

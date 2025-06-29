@@ -5,7 +5,7 @@ info:
   description: API para organização de dívidas, fontes e parcelas pessoais
 
 servers:
-  - url: http://localhost:3000
+  - url: http://localhost:3001
 
 components:
   securitySchemes:

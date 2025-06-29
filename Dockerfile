@@ -19,4 +19,4 @@ RUN npx prisma generate
 COPY . .
 
 # Expõe a porta da API
-EXPOSE 3000
+EXPOSE 3001

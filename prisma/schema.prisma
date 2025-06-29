@@ -18,6 +18,7 @@ model User {
   debts       Debt[]
 
   Installment Installment[]
+  trips       Trip[]
 }
 
 model DebtSource {
@@ -30,41 +31,58 @@ model DebtSource {
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  debts  Debt[]
+  debts       Debt[]
   description String?
 }
 
 model Debt {
-  id                   String   @id @default(uuid())
-  title                String
-  amount               Decimal
-  description          String?
-  installmentsNumber   Int
-  createdAt      DateTime @default(now())
+  id                 String   @id @default(uuid())
+  title              String
+  amount             Decimal
+  description        String?
+  installmentsNumber Int
+  createdAt          DateTime @default(now())
 
-  user           User        @relation(fields: [userId], references: [id])
-  userId         String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 
-  debtSource     DebtSource @relation(fields: [debtSourceId], references: [id])
-  debtSourceId   String
+  debtSource   DebtSource @relation(fields: [debtSourceId], references: [id])
+  debtSourceId String
 
-  installments   Installment[]
+  trip   Trip? @relation(fields: [tripId], references: [id])
+  tripId Int?
+
+  installments Installment[]
 }
 
 model Installment {
-  id        String   @id @default(uuid())
+  id        String            @id @default(uuid())
   amount    Decimal
   month     Int
   year      Int
   status    InstallmentStatus @default(PENDING)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
   type      InstallmentType
 
-  user       User     @relation(fields: [userId], references: [id])
-  userId     String
-  debt      Debt     @relation(fields: [debtId], references: [id])
-  debtId    String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  debt   Debt   @relation(fields: [debtId], references: [id])
+  debtId String
+}
+
+model Trip {
+  id          Int      @id @default(autoincrement())
+  startDate   DateTime
+  endDate     DateTime
+  location    String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  debts  Debt[]
 }
 
 enum DebtType {
