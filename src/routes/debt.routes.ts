@@ -1,9 +1,10 @@
-import express from 'express'
-import { createDebt } from '../controllers/debt.controller'
-import { authenticateToken } from '../middleware/auth.middleware'
+import { Router } from 'express'
+import { authenticateToken } from '@/middleware/auth.middleware'
+import { DebtController } from '@/controllers/debt.controller'
 
-const router = express.Router()
+const router = Router()
+const debtController = new DebtController()
 
-router.post('/', authenticateToken, createDebt)
+router.post('/debts', authenticateToken, debtController.createDebt)
 
 export default router

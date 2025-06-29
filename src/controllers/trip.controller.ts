@@ -1,25 +1,32 @@
-import { RequestHandler } from 'express'
+import { Request, Response } from 'express'
 import { handleError } from '@/utils/funcs/handleError'
-import { tripService } from '@/service/trip.service'
+import { TripService } from '@/service/trip.service'
 import { createTripSchema } from '@/validators/trip.validation'
+import { jwtPayload } from '@/utils/interfaces/jwt-payload.interface'
+import { HttpStatusCode } from '@/utils/constants/httpStatus'
 
-export const tripController: {
-  create: RequestHandler
-  list: RequestHandler
-} = {
-  create: async (req, res) => {
+export class TripController {
+  private readonly tripService: TripService
+
+  constructor() {
+    this.tripService = new TripService()
+  }
+
+  create = async (req: Request & { user?: jwtPayload }, res: Response) => {
+    const userId = req.user!.userId
     try {
       const validated = createTripSchema.parse(req.body)
-      const trip = await tripService.create(req.user.id, validated)
-      res.status(201).json(trip)
+      const trip = await this.tripService.create(userId, validated)
+      res.status(HttpStatusCode.CREATED).json(trip)
     } catch (err) {
       handleError(res, err)
     }
-  },
-  list: async (req, res) => {
+  }
+
+  list = async (req: Request & { user?: jwtPayload }, res: Response) => {
     try {
-      const trips = await tripService.list(req.user.id)
-      res.json(trips)
+      const trips = await this.tripService.list(req.user!.userId)
+      res.status(HttpStatusCode.SUCCESS).json(trips)
     } catch (err) {
       handleError(res, err)
     }

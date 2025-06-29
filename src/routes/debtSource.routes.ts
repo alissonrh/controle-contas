@@ -1,19 +1,14 @@
-import express from 'express'
-import {
-  createDebtSource,
-  deleteDebtSource,
-  getAllDebtSources,
-  getDebtSourceById,
-  updateDebtSource
-} from '../controllers/debtSource.controller'
+import { Router } from 'express'
 import { authenticateToken } from '../middleware/auth.middleware'
+import { DebtSourceController } from '../controllers/debtSource.controller'
 
-const router = express.Router()
+const router = Router()
+const controller = new DebtSourceController()
 
-router.post('/', authenticateToken, createDebtSource)
-router.get('/', authenticateToken, getAllDebtSources)
-router.get('/:id', authenticateToken, getDebtSourceById)
-router.put('/:id', authenticateToken, updateDebtSource)
-router.delete('/:id', authenticateToken, deleteDebtSource)
+router.post('/', authenticateToken, controller.createDebtSource)
+router.get('/', authenticateToken, controller.getAllDebtSources)
+router.get('/:id', authenticateToken, controller.getDebtSourceById)
+router.put('/:id', authenticateToken, controller.updateDebtSource)
+router.delete('/:id', authenticateToken, controller.deleteDebtSource)
 
 export default router

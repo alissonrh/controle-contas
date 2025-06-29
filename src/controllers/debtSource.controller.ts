@@ -6,146 +6,145 @@ import {
   DebtSourceResponse
 } from '../utils/interfaces/debt-source.interface'
 import { jwtPayload } from '../utils/interfaces/jwt-payload.interface'
-import * as DebtSourceService from '../service/debtSource.service'
-import { DebtSource } from '@prisma/client'
+import { DebtSourceService } from '../service/debtSource.service'
 import { HttpStatusCode } from '../utils/constants/httpStatus'
 
-export const createDebtSource = async (
-  req: Request & { user?: jwtPayload },
-  res: Response
-) => {
-  const userId = req.user!.userId
+export class DebtSourceController {
+  private readonly debtSourceService: DebtSourceService
 
-  try {
-    const data: DebtSourceInput = debtSourceSchema.parse(req.body)
-
-    const created: DebtSource = await DebtSourceService.createDebtSource(
-      userId,
-      data
-    )
-
-    const response: DebtSourceResponse = {
-      id: created.id,
-      name: created.name,
-      type: created.type,
-      dueDay: created.dueDay,
-      description: created.description ?? undefined
-    }
-
-    return res.status(HttpStatusCode.SUCCESS).json({
-      message: 'DEBT_SOURCE_CREATED_SUCCESSFULLY',
-      data: response
-    })
-  } catch (error) {
-    handleError(res, error)
+  constructor() {
+    this.debtSourceService = new DebtSourceService()
   }
-}
 
-export const getAllDebtSources = async (
-  req: Request & { user?: jwtPayload },
-  res: Response
-) => {
-  const userId = req.user!.userId
-  try {
-    const debtSourcesList = await DebtSourceService.getAllDebtSources(userId)
+  createDebtSource = async (
+    req: Request & { user?: jwtPayload },
+    res: Response
+  ) => {
+    const userId = req.user!.userId
 
-    const response: DebtSourceResponse[] = debtSourcesList.map(
-      (ds: DebtSourceResponse) => ({
-        id: ds.id,
-        name: ds.name,
-        type: ds.type,
-        description: ds.description ?? null,
-        dueDay: ds.dueDay
+    try {
+      const data: DebtSourceInput = debtSourceSchema.parse(req.body)
+
+      const created = await this.debtSourceService.createDebtSource(
+        userId,
+        data
+      )
+
+      const response: DebtSourceResponse = {
+        id: created.id,
+        name: created.name,
+        type: created.type,
+        dueDay: created.dueDay,
+        description: created.description ?? undefined
+      }
+
+      return res.status(HttpStatusCode.SUCCESS).json({
+        message: 'DEBT_SOURCE_CREATED_SUCCESSFULLY',
+        data: response
       })
-    )
-
-    res.status(HttpStatusCode.SUCCESS).json({ data: response })
-  } catch (error) {
-    handleError(res, error)
+    } catch (error) {
+      handleError(res, error)
+    }
   }
-}
 
-export const getDebtSourceById = async (
-  req: Request & { user?: jwtPayload },
-  res: Response
-) => {
-  const userId = req.user!.userId
-  const sourceId = req.params.id
+  getAllDebtSources = async (
+    req: Request & { user?: jwtPayload },
+    res: Response
+  ) => {
+    const userId = req.user!.userId
+    try {
+      const list = await this.debtSourceService.getAllDebtSources(userId)
 
-  try {
-    const source = await DebtSourceService.getDebtSourceById(sourceId, userId)
+      const response: DebtSourceResponse[] = list.map(
+        (ds: DebtSourceResponse) => ({
+          id: ds.id,
+          name: ds.name,
+          type: ds.type,
+          description: ds.description ?? null,
+          dueDay: ds.dueDay
+        })
+      )
 
-    if (!source) {
-      return res
-        .status(HttpStatusCode.NOT_FOUND)
-        .json({ error: 'DEBT_SOURCE_NOT_FOUD' })
+      res.status(HttpStatusCode.SUCCESS).json({ data: response })
+    } catch (error) {
+      handleError(res, error)
     }
-
-    const response: DebtSourceResponse = {
-      id: source.id,
-      name: source.name,
-      type: source.type,
-      description: source.description,
-      dueDay: source.dueDay
-    }
-
-    return res.status(HttpStatusCode.SUCCESS).json({ data: response })
-  } catch (error) {
-    handleError(res, error)
   }
-}
 
-export const updateDebtSource = async (
-  req: Request & { user?: jwtPayload },
-  res: Response
-) => {
-  const userId = req.user!.userId
-  const sourceId = req.params.id
+  getDebtSourceById = async (
+    req: Request & { user?: jwtPayload },
+    res: Response
+  ) => {
+    const userId = req.user!.userId
+    const sourceId = req.params.id
 
-  try {
-    const data: DebtSourceInput = debtSourceSchema.parse(req.body)
+    try {
+      const source = await this.debtSourceService.getDebtSourceById(
+        sourceId,
+        userId
+      )
 
-    const updatedSource = await DebtSourceService.updateDebtSource(
-      sourceId,
-      userId,
-      data
-    )
+      const response: DebtSourceResponse = {
+        id: source.id,
+        name: source.name,
+        type: source.type,
+        description: source.description,
+        dueDay: source.dueDay
+      }
 
-    const response: DebtSourceResponse = {
-      id: updatedSource.id,
-      name: updatedSource.name,
-      type: updatedSource.type,
-      description: updatedSource.description,
-      dueDay: updatedSource.dueDay
+      return res.status(HttpStatusCode.SUCCESS).json({ data: response })
+    } catch (error) {
+      handleError(res, error)
     }
-
-    return res.status(HttpStatusCode.SUCCESS).json({
-      message: 'DEBT_SOURCE_UPDATED_SUCCESSFULLY',
-      data: response
-    })
-  } catch (error) {
-    handleError(res, error)
   }
-}
 
-export const deleteDebtSource = async (
-  req: Request & { user?: jwtPayload },
-  res: Response
-) => {
-  const userId = req.user!.userId
-  const sourceId = req.params.id
-  try {
-    const source = await DebtSourceService.getDebtSourceById(sourceId, userId)
-    if (!source) {
-      return res
-        .status(HttpStatusCode.NOT_FOUND)
-        .json({ error: 'DEBT_SOURCE_NOT_FOUD' })
+  updateDebtSource = async (
+    req: Request & { user?: jwtPayload },
+    res: Response
+  ) => {
+    const userId = req.user!.userId
+    const sourceId = req.params.id
+
+    try {
+      const data: DebtSourceInput = debtSourceSchema.parse(req.body)
+
+      const updated = await this.debtSourceService.updateDebtSource(
+        sourceId,
+        userId,
+        data
+      )
+
+      const response: DebtSourceResponse = {
+        id: updated.id,
+        name: updated.name,
+        type: updated.type,
+        description: updated.description,
+        dueDay: updated.dueDay
+      }
+
+      return res.status(HttpStatusCode.SUCCESS).json({
+        message: 'DEBT_SOURCE_UPDATED_SUCCESSFULLY',
+        data: response
+      })
+    } catch (error) {
+      handleError(res, error)
     }
+  }
 
-    res
-      .status(HttpStatusCode.SUCCESS)
-      .json({ message: 'DEBT_SOURCE_DELETED_SUCCESSFULLY' })
-  } catch (error) {
-    handleError(res, error)
+  deleteDebtSource = async (
+    req: Request & { user?: jwtPayload },
+    res: Response
+  ) => {
+    const userId = req.user!.userId
+    const sourceId = req.params.id
+    try {
+      await this.debtSourceService.deleteDebtSource(sourceId, userId)
+
+      res.status(HttpStatusCode.SUCCESS).json({
+        message: 'DEBT_SOURCE_DELETED_SUCCESSFULLY'
+      })
+    } catch (error) {
+      handleError(res, error)
+    }
   }
 }

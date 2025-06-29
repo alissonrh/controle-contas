@@ -1,32 +1,40 @@
 import { Request, Response } from 'express'
-import { handleError } from '../utils/funcs/handleError'
-import { DebtResponse } from '../utils/interfaces/debt.interface'
-import { createDebtSchema } from '../validators/debt.schema'
-import { HttpStatusCode } from '../utils/constants/httpStatus'
-import * as DebtService from '../service/debt.service'
-import { jwtPayload } from '../utils/interfaces/jwt-payload.interface'
+import { handleError } from '@/utils/funcs/handleError'
+import { DebtResponse } from '@/utils/interfaces/debt.interface'
+import { createDebtSchema } from '@/validators/debt.schema'
+import { HttpStatusCode } from '@/utils/constants/httpStatus'
+import { DebtService } from '@/service/debt.service'
+import { jwtPayload } from '@/utils/interfaces/jwt-payload.interface'
 
-export const createDebt = async (
-  req: Request & { user?: jwtPayload },
-  res: Response
-) => {
-  const userId = req.user!.userId
+export class DebtController {
+  private readonly debtService: DebtService
 
-  try {
-    const data = createDebtSchema.parse(req.body)
+  constructor() {
+    this.debtService = new DebtService()
+  }
 
-    const newDebt: DebtResponse = await DebtService.createDebt(data, userId)
+  createDebt = async (req: Request & { user?: jwtPayload }, res: Response) => {
+    const userId = req.user!.userId
 
-    const response: DebtResponse = {
-      id: newDebt.id,
-      title: newDebt.title,
-      amount: newDebt.amount,
-      debtSourceId: newDebt.debtSourceId,
-      installmentsNumber: newDebt.installmentsNumber
+    try {
+      const data = createDebtSchema.parse(req.body)
+
+      const newDebt: DebtResponse = await this.debtService.createDebt(
+        data,
+        userId
+      )
+
+      const response: DebtResponse = {
+        id: newDebt.id,
+        title: newDebt.title,
+        amount: newDebt.amount,
+        debtSourceId: newDebt.debtSourceId,
+        installmentsNumber: newDebt.installmentsNumber
+      }
+
+      res.status(HttpStatusCode.CREATED).json({ data: response })
+    } catch (error) {
+      handleError(res, error)
     }
-
-    res.status(HttpStatusCode.CREATED).json({ data: response })
-  } catch (error) {
-    handleError(res, error)
   }
 }

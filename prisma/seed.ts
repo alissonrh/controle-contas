@@ -6,14 +6,14 @@ const prisma = new PrismaClient()
 async function main() {
   const saltRounds = 10
 
-  const password1 = await bcrypt.hash('Teste@123', saltRounds)
+  const password1 = await bcrypt.hash('@dmin123', saltRounds)
   const password2 = await bcrypt.hash('Senha@456', saltRounds)
 
   // Cria usuários
   const user1 = await prisma.user.create({
     data: {
-      name: 'Alisson',
-      email: 'alisson@example.com',
+      name: 'admin',
+      email: 'admin@admin.com',
       password: password1
     }
   })
@@ -104,7 +104,7 @@ async function main() {
   console.log('🌱 Seeds criadas com sucesso!')
 }
 
-main()  dueDate: string
+main()
   .catch((e) => {
     console.error(e)
     process.exit(1)
