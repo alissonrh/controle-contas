@@ -9,104 +9,114 @@ async function main() {
   const password1 = await bcrypt.hash('@dmin123', saltRounds)
   const password2 = await bcrypt.hash('Senha@456', saltRounds)
 
-  // Cria usuários
-  const user1 = await prisma.user.create({
-    data: {
-      name: 'admin',
-      email: 'admin@admin.com',
-      password: password1
-    }
-  })
+  // === Usuários ===
+  const [user1, user2] = await Promise.all([
+    prisma.user.create({
+      data: {
+        name: 'admin',
+        email: 'admin@admin.com',
+        password: password1
+      }
+    }),
+    prisma.user.create({
+      data: {
+        name: 'João',
+        email: 'joao@example.com',
+        password: password2
+      }
+    })
+  ])
 
-  const user2 = await prisma.user.create({
-    data: {
-      name: 'João',
-      email: 'joao@example.com',
-      password: password2
-    }
-  })
+  // === Fontes de dívida ===
+  const [fonte1, fonte2, fonte3] = await Promise.all([
+    prisma.debtSource.create({
+      data: {
+        name: 'Nubank',
+        type: 'CARTAO',
+        dueDay: 10,
+        userId: user1.id
+      }
+    }),
+    prisma.debtSource.create({
+      data: {
+        name: 'Empréstimo Banco',
+        type: 'BANCO',
+        dueDay: 5,
+        userId: user2.id
+      }
+    }),
+    prisma.debtSource.create({
+      data: {
+        name: 'Empréstimo Pessoal',
+        type: 'PESSOA',
+        dueDay: 15,
+        userId: user1.id,
+        description: 'Empréstimo com amigo'
+      }
+    })
+  ])
 
-  // Fontes de dívida
-  const fonte1 = await prisma.debtSource.create({
+  // === Viagem ===
+  const trip = await prisma.trip.create({
     data: {
-      name: 'Nubank',
-      type: 'CARTAO',
-      dueDay: 10,
-      userId: user1.id
-    }
-  })
-
-  const fonte2 = await prisma.debtSource.create({
-    data: {
-      name: 'Empréstimo Banco',
-      type: 'BANCO',
-      dueDay: 5,
-      userId: user2.id
-    }
-  })
-
-  const fonte3 = await prisma.debtSource.create({
-    data: {
-      name: 'Empréstimo Pessoal',
-      type: 'PESSOA',
-      dueDay: 15,
-      userId: user1.id,
-      description: 'Empréstimo com amigo'
-    }
-  })
-
-  // Dívidas
-  const divida1 = await prisma.debt.create({
-    data: {
-      title: 'Compra de notebook Dell',
-      amount: 1500.0,
-      createdAt: new Date('2025-05-10'),
-      description: 'Compra notebook',
-      userId: user1.id,
-      debtSourceId: fonte1.id,
-      installmentsNumber: 10
-    }
-  })
-
-  const divida2 = await prisma.debt.create({
-    data: {
-      title: 'Viagem GAGA',
-      amount: 1500.0,
-      createdAt: new Date('2025-05-10'),
       userId: user2.id,
-      debtSourceId: fonte2.id,
-      installmentsNumber: 3
+      startDate: new Date('2025-06-01'),
+      endDate: new Date('2025-06-07'),
+      location: 'Nova York',
+      description: 'Viagem para conhecer a cidade'
     }
   })
 
-  // Parcelas
-  // await prisma.installment.createMany({
-  //   data: [
-  //     {
-  //       amount: 1500.0,
-  //       month: 5,
-  //       year: 2025,
-  //       status: 'PENDING',
-  //       type: 'ELETRONICO',
-  //       debtId: divida1.id
-  //     },
-  //     {
-  //       amount: 1800.0,
-  //       month: 5,
-  //       year: 2025,
-  //       status: 'PAID',
-  //       type: 'VIAGEM',
-  //       debtId: divida2.id
-  //     }
-  //   ]
-  // })
+  // === Dívidas ===
+  const [divida1, divida2] = await Promise.all([
+    prisma.debt.create({
+      data: {
+        title: 'Compra de notebook Dell',
+        amount: 1500.0,
+        createdAt: new Date('2025-05-10'),
+        description: 'Notebook Dell XPS',
+        userId: user1.id,
+        debtSourceId: fonte1.id,
+        installmentsNumber: 10,
+        type: 'ELETRONICO'
+      }
+    }),
+    prisma.debt.create({
+      data: {
+        title: 'Viagem GAGA',
+        amount: 1500.0,
+        createdAt: new Date('2025-05-10'),
+        userId: user2.id,
+        debtSourceId: fonte2.id,
+        installmentsNumber: 3,
+        type: 'VIAGEM',
+        tripId: trip.id
+      }
+    })
+  ])
+
+  // === Parcelas (installments) da dívida 2 ===
+  const installments = [0, 1, 2].map((i) =>
+    prisma.installment.create({
+      data: {
+        amount: 500,
+        month: 6 + i,
+        year: 2025,
+        status: i === 0 ? 'PAID' : 'PENDING',
+        userId: user2.id,
+        debtId: divida2.id
+      }
+    })
+  )
+
+  await Promise.all(installments)
 
   console.log('🌱 Seeds criadas com sucesso!')
 }
 
 main()
   .catch((e) => {
-    console.error(e)
+    console.error('Erro ao criar seed:', e)
     process.exit(1)
   })
   .finally(() => {

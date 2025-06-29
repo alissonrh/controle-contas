@@ -17,16 +17,16 @@ model User {
   debtSources DebtSource[]
   debts       Debt[]
 
-  Installment Installment[]
+  installment Installment[]
   trips       Trip[]
 }
 
 model DebtSource {
-  id        String   @id @default(uuid())
+  id        String         @id @default(uuid())
   name      String
-  type      DebtType
+  type      DebtSourceType @default(OUTRO)
   dueDay    Int
-  createdAt DateTime @default(now())
+  createdAt DateTime       @default(now())
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
@@ -49,8 +49,9 @@ model Debt {
   debtSource   DebtSource @relation(fields: [debtSourceId], references: [id])
   debtSourceId String
 
-  trip   Trip? @relation(fields: [tripId], references: [id])
+  trip   Trip?    @relation(fields: [tripId], references: [id])
   tripId Int?
+  type   DebtType @default(OUTRO)
 
   installments Installment[]
 }
@@ -63,7 +64,6 @@ model Installment {
   status    InstallmentStatus @default(PENDING)
   createdAt DateTime          @default(now())
   updatedAt DateTime          @updatedAt
-  type      InstallmentType
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
@@ -85,7 +85,7 @@ model Trip {
   debts  Debt[]
 }
 
-enum DebtType {
+enum DebtSourceType {
   CARTAO
   BANCO
   PESSOA
@@ -98,7 +98,7 @@ enum InstallmentStatus {
   PAID
 }
 
-enum InstallmentType {
+enum DebtType {
   ELETRONICO
   ROUPA
   VIAGEM
