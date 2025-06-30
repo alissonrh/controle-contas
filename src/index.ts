@@ -15,6 +15,8 @@ import debtSourceRoutes from './routes/debtSource.routes'
 import refreshToken from './routes/auth.routes'
 import debtRouutes from './routes/debt.routes'
 import tripRoutes from './routes/trip.routes'
+import swaggerAuthRoutes from './routes/swagger-auth.route'
+import installmentRoutes from './routes/installment.routes'
 
 const app = express()
 
@@ -42,12 +44,14 @@ app.use((req, res, next) => {
 
 app.use('/api/users', userRoutes)
 app.use('/api/debt-sources', debtSourceRoutes)
-app.use('/api/debt', debtRouutes)
+app.use('/api/debts', debtRouutes)
+app.use('/api/installments', installmentRoutes)
 app.use('/api', refreshToken)
 app.use('/api/trips', tripRoutes)
 
 // Swagger
-
+app.use(express.urlencoded({ extended: true }))
+app.use(swaggerAuthRoutes)
 app.use(express.static(path.join(__dirname, 'utils', 'public')))
 
 app.get('/api-docs/login', (req, res) => {

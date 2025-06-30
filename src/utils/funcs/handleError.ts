@@ -13,6 +13,7 @@ export const handleError = (res: Response, error: unknown): Response => {
   if (error instanceof BaseError) {
     return res.status(error.status).json({ error: error.message })
   }
+  console.error('Unexpected error:', error)
 
   return res
     .status(HttpStatusCode.INTERNAL_SERVER_ERROR)

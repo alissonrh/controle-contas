@@ -1,10 +1,10 @@
-import { DebtSourceInput } from '@/utils/interfaces/debt-source.interface'
 import { prisma } from '@/utils/lib/prisma'
 import { BaseError } from '@/utils/class/baseError'
 import { HttpStatusCode } from '@/utils/constants/httpStatus'
+import { DebtSourceDTO } from '@/validators/debtSource.schema'
 
 export class DebtSourceService {
-  async createDebtSource(userId: string, data: DebtSourceInput) {
+  async createDebtSource(userId: string, data: DebtSourceDTO) {
     return await prisma.debtSource.create({
       data: { ...data, userId }
     })
@@ -29,7 +29,7 @@ export class DebtSourceService {
     return debtSource
   }
 
-  async updateDebtSource(id: string, userId: string, data: DebtSourceInput) {
+  async updateDebtSource(id: string, userId: string, data: DebtSourceDTO) {
     const existing = await prisma.debtSource.findUnique({ where: { id } })
 
     if (!existing || existing.userId !== userId) {

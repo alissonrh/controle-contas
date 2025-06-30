@@ -26,12 +26,12 @@ tags:
     description: Parcelas de dívidas
   - name: DebtSources
     description: Fontes de dívidas
+  - name: 
 
 paths:
   /api/users/register:
     post:
-      tags:
-        - Users
+      tags: [Users]
       summary: Registra um novo usuário
       requestBody:
         required: true
@@ -39,10 +39,7 @@ paths:
           application/json:
             schema:
               type: object
-              required:
-                - name
-                - email
-                - password
+              required: [name, email, password]
               properties:
                 name:
                   type: string
@@ -58,8 +55,7 @@ paths:
 
   /api/users/login:
     post:
-      tags:
-        - Users
+      tags: [Users]
       summary: Login e retorno do token JWT
       requestBody:
         required: true
@@ -67,16 +63,14 @@ paths:
           application/json:
             schema:
               type: object
-              required:
-                - email
-                - password
+              required: [email, password]
               properties:
                 email:
                   type: string
-                  example: "alisson@example.com"
+                  example: alisson@example.com
                 password:
                   type: string
-                  example: "Teste@123"
+                  example: Teste@123
       responses:
         200:
           description: Token JWT retornado
@@ -85,8 +79,7 @@ paths:
 
   /api/users/me:
     get:
-      tags:
-        - Users
+      tags: [Users]
       summary: Retorna dados do usuário autenticado
       responses:
         200:
@@ -94,10 +87,10 @@ paths:
         401:
           description: Token inválido ou ausente
 
-    /api/debts:
+  /api/debts:
     get:
-      summary: Lista todas as dívidas do usuário autenticado
       tags: [Debts]
+      summary: Lista todas as dívidas do usuário autenticado
       responses:
         200:
           description: Lista de dívidas
@@ -105,8 +98,8 @@ paths:
           description: Token inválido ou ausente
 
     post:
-      summary: Cria uma nova dívida
       tags: [Debts]
+      summary: Cria uma nova dívida
       requestBody:
         required: true
         content:
@@ -114,13 +107,44 @@ paths:
             schema:
               type: object
               required:
-                - description
+                - title
+                - amount
                 - debtSourceId
+                - installmentsNumber
+                - type
+                - firstMonth
+                - firstYear
               properties:
-                description:
+                title:
                   type: string
+                amount:
+                  type: number
                 debtSourceId:
                   type: string
+                installmentsNumber:
+                  type: integer
+                description:
+                  type: string
+                  nullable: true
+                type:
+                  type: string
+                  enum: ([
+                    ELETRONICO,
+                    ROUPA,
+                    VIAGEM,
+                    ALIMENTACAO,
+                    SAUDE,
+                    EDUCACAO,
+                    OUTRO
+                    ])
+                firstMonth:
+                  type: integer
+                  minimum: 1
+                  maximum: 12
+                firstYear:
+                  type: integer
+                  minimum: 2000
+                  maximum: 2100
       responses:
         201:
           description: Dívida criada com sucesso
@@ -129,8 +153,8 @@ paths:
 
   /api/debts/{id}:
     get:
-      summary: Retorna uma dívida específica
       tags: [Debts]
+      summary: Retorna uma dívida específica
       parameters:
         - in: path
           name: id
@@ -144,8 +168,8 @@ paths:
           description: Dívida não encontrada
 
     put:
-      summary: Atualiza uma dívida
       tags: [Debts]
+      summary: Atualiza uma dívida
       parameters:
         - in: path
           name: id
@@ -168,8 +192,8 @@ paths:
           description: Dados inválidos
 
     delete:
-      summary: Remove uma dívida
       tags: [Debts]
+      summary: Remove uma dívida
       parameters:
         - in: path
           name: id
@@ -184,19 +208,15 @@ paths:
 
   /api/installments:
     post:
-      summary: Cria uma nova parcela para uma dívida
       tags: [Installments]
+      summary: Cria uma nova parcela para uma dívida
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required:
-                - amount
-                - month
-                - year
-                - debtId
+              required: [amount, month, year, type, debtId]
               properties:
                 amount:
                   type: number
@@ -206,6 +226,15 @@ paths:
                   type: integer
                 type:
                   type: string
+                  enum: ([
+                    ELETRONICO,
+                    ROUPA,
+                    VIAGEM,
+                    ALIMENTACAO,
+                    SAUDE,
+                    EDUCACAO,
+                    OUTRO
+                    ])
                 status:
                   type: string
                   enum: [PENDING, PAID]
@@ -218,9 +247,9 @@ paths:
           description: Dados inválidos
 
   /api/installments/{debtId}:
-     get:
-      summary: Lista as parcelas de uma dívida
+    get:
       tags: [Installments]
+      summary: Lista as parcelas de uma dívida
       parameters:
         - in: path
           name: debtId
@@ -233,25 +262,26 @@ paths:
         404:
           description: Dívida não encontrada
 
-     get:
-      summary: Lista as parcelas de uma dívida
+  /api/installments/{id}/pay:
+    patch:
       tags: [Installments]
+      summary: Marca a parcela como paga
       parameters:
         - in: path
-          name: debtId
+          name: id
           required: true
           schema:
             type: string
       responses:
         200:
-          description: Lista de parcelas
+          description: Parcela atualizada
         404:
-          description: Dívida não encontrada
+          description: Parcela não encontrada
 
   /api/debt-sources:
     get:
-      summary: Lista todas as fontes de dívidas
       tags: [DebtSources]
+      summary: Lista todas as fontes de dívidas
       responses:
         200:
           description: Lista de fontes de dívidas
@@ -259,24 +289,21 @@ paths:
           description: Token inválido ou ausente
 
     post:
-      summary: Cria uma nova fonte de dívida
       tags: [DebtSources]
+      summary: Cria uma nova fonte de dívida
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required:
-                - name
-                - dueDay
-                - type
+              required: [name, dueDay, type]
               properties:
                 name:
                   type: string
                 type:
                   type: string
-                  enum: ['CARTAO', 'BANCO', 'PESSOA', 'CREDIARIO', 'OUTRO'] 
+                  enum: [CARTAO, BANCO, PESSOA, CREDIARIO, OUTRO]
                 dueDay:
                   type: integer
                   minimum: 1
@@ -284,17 +311,16 @@ paths:
                 description:
                   type: string
                   nullable: true
-                
       responses:
         201:
           description: Fonte de dívida criada com sucesso
         400:
           description: Dados inválidos
-          
+
   /api/debt-sources/{id}:
     get:
-      summary: Retorna uma fonte de dívida específica
       tags: [DebtSources]
+      summary: Retorna uma fonte de dívida específica
       parameters:
         - in: path
           name: id
@@ -308,8 +334,8 @@ paths:
           description: Fonte de dívida não encontrada
 
     put:
-      summary: Atualiza uma fonte de dívida
       tags: [DebtSources]
+      summary: Atualiza uma fonte de dívida
       parameters:
         - in: path
           name: id
@@ -327,7 +353,7 @@ paths:
                   type: string
                 type:
                   type: string
-                  enum: ['CARTAO', 'BANCO', 'PESSOA', 'CREDIARIO', 'OUTRO'] 
+                  enum: [CARTAO, BANCO, PESSOA, CREDIARIO, OUTRO]
                 dueDay:
                   type: integer
                   minimum: 1
@@ -342,8 +368,8 @@ paths:
           description: Dados inválidos
 
     delete:
-      summary: Remove uma fonte de dívida
       tags: [DebtSources]
+      summary: Remove uma fonte de dívida
       parameters:
         - in: path
           name: id
@@ -354,4 +380,4 @@ paths:
         204:
           description: Fonte de dívida removida com sucesso
         404:
-          description: Fonte de dívida não encontrada  
+          description: Fonte de dívida não encontrada

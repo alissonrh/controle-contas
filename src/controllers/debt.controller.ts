@@ -37,4 +37,24 @@ export class DebtController {
       handleError(res, error)
     }
   }
+
+  getAllDebts = async (req: Request & { user?: jwtPayload }, res: Response) => {
+    const userId = req.user!.userId
+
+    try {
+      const debts = await this.debtService.getAllDebts(userId)
+
+      const response: DebtResponse[] = debts.map((debt: DebtResponse) => ({
+        id: debt.id,
+        title: debt.title,
+        amount: debt.amount,
+        debtSourceId: debt.debtSourceId,
+        installmentsNumber: debt.installmentsNumber
+      }))
+
+      res.status(HttpStatusCode.SUCCESS).json({ data: response })
+    } catch (error) {
+      handleError(res, error)
+    }
+  }
 }

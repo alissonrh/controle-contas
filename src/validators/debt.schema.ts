@@ -5,6 +5,8 @@ export const createDebtSchema = z.object({
   amount: z.number().positive(),
   debtSourceId: z.string().uuid(),
   installmentsNumber: z.number().int().positive().max(60),
+  firstMonth: z.number().min(1).max(12),
+  firstYear: z.number().min(2000).max(2100),
   description: z.string().optional(),
   type: z
     .enum([

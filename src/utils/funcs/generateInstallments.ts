@@ -20,7 +20,5 @@ export function generateInstallments(
     }
   }
 
-  console.log('Generated installments:', installments)
-
   return installments
 }

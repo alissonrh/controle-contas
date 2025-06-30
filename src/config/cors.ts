@@ -1,9 +1,9 @@
 import cors from 'cors'
 
 const devOrigins = [
-  'http://localhost:3000',
-  'http://127.0.0.1:3000',
-  'http://0.0.0.0:3000',
+  'http://localhost:3001',
+  'http://127.0.0.1:3001',
+  'http://0.0.0.0:3001',
   'http://localhost:5173'
 ]
 
@@ -17,7 +17,12 @@ export const getCorsMiddleware = () =>
     origin: (origin, callback) => {
       const isDev = process.env.NODE_ENV !== 'production'
       const isWhitelisted = origin && allowedOrigins.includes(origin)
-      const isSwaggerOrBrowser = isDev && origin === undefined
+      const isSwaggerOrBrowser =
+        isDev &&
+        (origin === undefined ||
+          origin === null ||
+          origin === 'null' ||
+          origin === '*')
 
       if (isWhitelisted || isSwaggerOrBrowser) {
         callback(null, true)

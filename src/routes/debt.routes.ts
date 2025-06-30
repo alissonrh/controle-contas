@@ -5,6 +5,7 @@ import { DebtController } from '@/controllers/debt.controller'
 const router = Router()
 const debtController = new DebtController()
 
-router.post('/debts', authenticateToken, debtController.createDebt)
+router.post('/', authenticateToken, debtController.createDebt)
+router.get('/', authenticateToken, debtController.getAllDebts)
 
 export default router
