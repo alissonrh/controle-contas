@@ -11,3 +11,5 @@ export const debtSourceSchema = z.object({
 })
 
 export type DebtSourceDTO = z.infer<typeof debtSourceSchema>
+
+export const partialDebtSourceSchema = debtSourceSchema.partial()

@@ -26,7 +26,7 @@ tags:
     description: Parcelas de dívidas
   - name: DebtSources
     description: Fontes de dívidas
-  - name: 
+  - name:
 
 paths:
   /api/users/register:
@@ -333,7 +333,7 @@ paths:
         404:
           description: Fonte de dívida não encontrada
 
-    put:
+    patch:
       tags: [DebtSources]
       summary: Atualiza uma fonte de dívida
       parameters:

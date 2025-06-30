@@ -38,9 +38,7 @@ describe('DebtService', () => {
     it('throws error if debt source not found', async () => {
       mockPrisma.debtSource.findFirst.mockResolvedValue(null)
 
-      await expect(
-        service.createDebt(baseData as any, userId)
-      ).rejects.toThrowError(
+      await expect(service.createDebt(baseData as any, userId)).rejects.toThrow(
         new BaseError(HttpStatusCode.BAD_REQUEST, 'DEBT_SOURCE_NOT_FOUND')
       )
     })
@@ -64,6 +62,7 @@ describe('DebtService', () => {
         data: {
           name: 'Test Debt',
           amount: 300,
+          debtSourceId: 'source-1',
           installmentsNumber: 3,
           userId
         }

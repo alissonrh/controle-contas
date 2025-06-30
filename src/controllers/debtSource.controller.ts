@@ -1,5 +1,8 @@
 import { Request, Response } from 'express'
-import { debtSourceSchema } from '../validators/debtSource.schema'
+import {
+  debtSourceSchema,
+  partialDebtSourceSchema
+} from '../validators/debtSource.schema'
 import { handleError } from '../utils/funcs/handleError'
 import { DebtSourceResponse } from '../utils/interfaces/debt-source.interface'
 import { jwtPayload } from '../utils/interfaces/jwt-payload.interface'
@@ -101,9 +104,8 @@ export class DebtSourceController {
   ) => {
     const userId = req.user!.userId
     const sourceId = req.params.id
-
     try {
-      const data = debtSourceSchema.parse(req.body)
+      const data = partialDebtSourceSchema.parse(req.body)
 
       const updated = await this.debtSourceService.updateDebtSource(
         sourceId,

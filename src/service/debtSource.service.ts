@@ -29,7 +29,11 @@ export class DebtSourceService {
     return debtSource
   }
 
-  async updateDebtSource(id: string, userId: string, data: DebtSourceDTO) {
+  async updateDebtSource(
+    id: string,
+    userId: string,
+    data: Partial<DebtSourceDTO>
+  ) {
     const existing = await prisma.debtSource.findUnique({ where: { id } })
 
     if (!existing || existing.userId !== userId) {
