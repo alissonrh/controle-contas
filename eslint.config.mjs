@@ -10,13 +10,6 @@ export default defineConfig([
     plugins: { js },
     extends: ["js/recommended"]
   },
-  // Permite 'any' apenas em arquivos de teste
-  {
-    files: ["**/*.test.ts", "**/*.test.js", "**/*.spec.ts", "**/*.spec.js"],
-    rules: {
-      "@typescript-eslint/no-explicit-any": "off"
-    }
-  },
   // 2. Define variáveis globais do ambiente browser
   {
     files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
@@ -42,5 +35,12 @@ export default defineConfig([
         project: "./tsconfig.json",
       }
     }
-  }
+  },
+  // 6. Permite 'any' apenas em arquivos de teste
+  {
+    files: ["**/*.test.ts", "**/*.test.js", "**/*.spec.ts", "**/*.spec.js"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off"
+    }
+  },
 ]);
