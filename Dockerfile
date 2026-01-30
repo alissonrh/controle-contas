@@ -4,7 +4,7 @@ FROM node:20-alpine
 
 RUN apk add --no-cache git openssh
 # Diretório de trabalho dentro do container
-WORKDIR /personal-finance-app
+WORKDIR /workspaces/personal-finance-app
 
 # Copia os arquivos necessários
 COPY package.json package-lock.json* ./
